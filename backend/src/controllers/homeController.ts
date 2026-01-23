@@ -1,4 +1,3 @@
-// src/controllers/home.controller.ts
 import type { NextFunction, Request, Response } from "express";
 import { getInnertube } from "../client";
 
