@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import { errorHandler } from "./middleware/errorHandler.js";
 import homeRoutes from "./routes/homeRoutes.js";
+import musicRoutes from "./routes/musicRoutes.js";
 
 export const app = express();
 
@@ -13,4 +14,6 @@ app.get("/health", (_, res) => {
 });
 
 app.use("/api", homeRoutes);
+app.use("/api", musicRoutes);
+
 app.use(errorHandler);

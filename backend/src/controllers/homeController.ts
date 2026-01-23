@@ -14,6 +14,8 @@ function extractMusicItem(item: any): MusicItem | null {
     id: item.id, // videoId
     title: item.title,
     type: item.item_type ?? "song",
+    duration: null,
+    channelId: null,
 
     artists: item.artists?.map((artist: any) => ({
       id: artist.channel_id,
@@ -67,7 +69,7 @@ function extractSection(section: any): HomeSection | null {
   };
 }
 
-function normalizeHomeResponse(raw: any): HomeResponse {
+export function normalizeHomeResponse(raw: any): HomeResponse {
   const sections: HomeSection[] = raw.sections
     .map(extractSection)
     .filter(Boolean);

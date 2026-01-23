@@ -34,6 +34,8 @@ export type Album = {
 
 export type MusicItem = {
   id: string;
+  channelId: string | null;
+  duration: number | null;
   title: string;
   type: "song" | "album" | "playlist";
   artists?: Artist[];
