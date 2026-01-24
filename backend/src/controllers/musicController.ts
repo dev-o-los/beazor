@@ -1,11 +1,16 @@
 import type { NextFunction, Request, Response } from "express";
 import path from "path";
-import { YtDlp } from "ytdlp-nodejs";
+// import { YtDlp } from "ytdlp-nodejs";
 import { getInnertube } from "../client";
 
-const ytDlp = new YtDlp({
-  binaryPath: path.join(process.cwd(), "yt-dlp"),
-});
+const binaryPath = path.join(
+  process.cwd(),
+  process.env.NODE_ENV === "development" ? "yt-dlp.exe" : "yt-dlp",
+);
+
+// const ytDlp = new YtDlp({
+//   binaryPath: binaryPath,
+// });
 
 export async function getStreamingUrl(
   req: Request,
@@ -22,15 +27,40 @@ export async function getStreamingUrl(
   }
 
   try {
-    const file = await ytDlp.getInfoAsync(url);
+    const proc = Bun.spawn([
+      binaryPath,
+      "--js-runtimes",
+      "bun",
+      "-f",
+      "bestaudio",
+      "-g",
+      url,
+    ]);
 
-    // console.log(file);
+    const stdout = await new Response(proc.stdout).text();
+    const stderr = await new Response(proc.stderr).text();
 
-    return res.json(file);
-  } catch (err: any) {
+    if (stderr) {
+      console.error(stderr);
+      return res.status(500).json({ message: stderr });
+    }
+
+    return res.json({ url: stdout.trim() });
+  } catch (e) {
     res.status(500);
-    next(err);
+    next(e);
   }
+
+  // try {
+  //   const file = await ytDlp.getInfoAsync(url);
+
+  //   // console.log(file);
+
+  //   return res.json(file);
+  // } catch (err: any) {
+  //   res.status(500);
+  //   next(err);
+  // }
 }
 
 export async function getMusicInfo(
