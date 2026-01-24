@@ -27,15 +27,30 @@ export async function getStreamingUrl(
   }
 
   try {
+    // const proc = Bun.spawn([
+    //   binaryPath,
+    //   "--js-runtimes",
+    //   "bun",
+    //   "--cookies",
+    //   path.join(process.cwd(), "cookies.txt"),
+    //   "-f",
+    //   "bestaudio",
+    //   "-g",
+    //   url,
+    // ]);
+
     const proc = Bun.spawn([
       binaryPath,
       "--js-runtimes",
-      "bun",
-      "--cookies",
-      path.join(process.cwd(), "cookies.txt"),
+      "bun", // keep if your setup needs it
+      "--user-agent",
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "--referer",
+      "https://www.youtube.com/",
       "-f",
-      "bestaudio",
-      "-g",
+      "bestaudio[ext=m4a]/bestaudio/best",
+      "-g", // get URL only
+      "--no-warnings", // cleaner output
       url,
     ]);
 
