@@ -6,7 +6,7 @@ let yt: Innertube | null = null;
 export async function getInnertube() {
   if (!yt) {
     yt = await Innertube.create({
-      retrieve_player: false,
+      retrieve_player: true,
     });
   }
   return yt;
