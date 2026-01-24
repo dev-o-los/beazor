@@ -31,6 +31,8 @@ export async function getStreamingUrl(
       binaryPath,
       "--js-runtimes",
       "bun",
+      "--cookies",
+      path.join(process.cwd(), "cookies.txt"),
       "-f",
       "bestaudio",
       "-g",
