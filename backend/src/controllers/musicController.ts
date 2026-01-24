@@ -3,7 +3,7 @@ import { YtDlp } from "ytdlp-nodejs";
 import { getInnertube } from "../client";
 
 const ytDlp = new YtDlp({
-  binaryPath: "C:/Users/utk27/Documents/beazor/backend/src/yt-dlp.exe",
+  binaryPath: "yt-dlp",
 });
 
 export async function getMusicInfo(
@@ -26,7 +26,7 @@ export async function getMusicInfo(
       url: info.basic_info.url_canonical,
     };
 
-    res.json(info);
+    res.json(data);
   } catch (e) {
     next(e);
   }
