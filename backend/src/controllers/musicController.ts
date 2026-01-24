@@ -3,34 +3,8 @@ import { YtDlp } from "ytdlp-nodejs";
 import { getInnertube } from "../client";
 
 const ytDlp = new YtDlp({
-  binaryPath: "yt-dlp",
+  binaryPath: "./yt-dlp",
 });
-
-export async function getMusicInfo(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
-  try {
-    const { videoId } = req.params;
-
-    const yt = await getInnertube();
-    const info = await yt.music.getInfo(videoId as string);
-
-    const data = {
-      channelId: info.basic_info.channel_id,
-      title: info.basic_info.title,
-      duration: info.basic_info.duration,
-      thumbnail: info.basic_info.thumbnail,
-      view_count: info.basic_info.view_count,
-      url: info.basic_info.url_canonical,
-    };
-
-    res.json(data);
-  } catch (e) {
-    next(e);
-  }
-}
 
 export async function getStreamingUrl(
   req: Request,
@@ -55,5 +29,31 @@ export async function getStreamingUrl(
   } catch (err: any) {
     res.status(500);
     next(err);
+  }
+}
+
+export async function getMusicInfo(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const { videoId } = req.params;
+
+    const yt = await getInnertube();
+    const info = await yt.music.getInfo(videoId as string);
+
+    const data = {
+      channelId: info.basic_info.channel_id,
+      title: info.basic_info.title,
+      duration: info.basic_info.duration,
+      thumbnail: info.basic_info.thumbnail,
+      view_count: info.basic_info.view_count,
+      url: info.basic_info.url_canonical,
+    };
+
+    res.json(data);
+  } catch (e) {
+    next(e);
   }
 }
