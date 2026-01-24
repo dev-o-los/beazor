@@ -1,9 +1,10 @@
 import type { NextFunction, Request, Response } from "express";
+import path from "path";
 import { YtDlp } from "ytdlp-nodejs";
 import { getInnertube } from "../client";
 
 const ytDlp = new YtDlp({
-  binaryPath: "./yt-dlp",
+  binaryPath: path.join(process.cwd(), "yt-dlp"),
 });
 
 export async function getStreamingUrl(
