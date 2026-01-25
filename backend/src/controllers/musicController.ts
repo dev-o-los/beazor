@@ -20,7 +20,7 @@ export async function getStreamingUrl(
   const { videoId } = req.params;
   // uNHXrFkua6A test v_id
 
-  const url = `https://www.youtube.com/watch?v=${videoId}`;
+  const url = `https://music.youtube.com/watch?v=${videoId}`;
 
   if (!videoId || typeof videoId !== "string" || videoId.length !== 11) {
     return res.status(400).json({ message: "Invalid YouTube video ID" });
