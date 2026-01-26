@@ -35,10 +35,13 @@
     "react-native-svg": "15.12.1",
     "react-native-web": "^0.21.0",
     "react-native-worklets": "0.5.1",
+    "react-youtube-music-player": "^1.0.5",
+    "soundcord": "^2.0.1",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^3.4.14",
     "tailwindcss-animate": "^1.0.7",
-    "youtubei.js": "^16.0.1"
+    "youtubei.js": "^16.0.1",
+    "ytube-noapi": "^1.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",

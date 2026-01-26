@@ -1,16 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
-import path from "path";
-// import { YtDlp } from "ytdlp-nodejs";
-import { getInnertube } from "../client";
+import { YouTube } from "soundcord";
 
-const binaryPath = path.join(
-  process.cwd(),
-  process.env.NODE_ENV === "development" ? "yt-dlp.exe" : "yt-dlp",
-);
-
-// const ytDlp = new YtDlp({
-//   binaryPath: binaryPath,
-// });
+const yt = new YouTube();
 
 export async function getStreamingUrl(
   req: Request,
@@ -20,64 +11,21 @@ export async function getStreamingUrl(
   const { videoId } = req.params;
   // uNHXrFkua6A test v_id
 
-  const url = `https://music.youtube.com/watch?v=${videoId}`;
-
   if (!videoId || typeof videoId !== "string" || videoId.length !== 11) {
     return res.status(400).json({ message: "Invalid YouTube video ID" });
   }
 
   try {
-    // const proc = Bun.spawn([
-    //   binaryPath,
-    //   "--js-runtimes",
-    //   "bun",
-    //   "--cookies",
-    //   path.join(process.cwd(), "cookies.txt"),
-    //   "-f",
-    //   "bestaudio",
-    //   "-g",
-    //   url,
-    // ]);
+    const stream = await yt.getStream(videoId);
 
-    const proc = Bun.spawn([
-      binaryPath,
-      "--js-runtimes",
-      "bun", // keep if your setup needs it
-      "--user-agent",
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-      "--referer",
-      "https://www.youtube.com/",
-      "-f",
-      "bestaudio[ext=m4a]/bestaudio/best",
-      "-g", // get URL only
-      "--no-warnings", // cleaner output
-      url,
-    ]);
-
-    const stdout = await new Response(proc.stdout).text();
-    const stderr = await new Response(proc.stderr).text();
-
-    if (stderr) {
-      console.error(stderr);
-      return res.status(500).json({ message: stderr });
-    }
-
-    return res.json({ url: stdout.trim() });
+    res.json({
+      ...stream,
+      videoId,
+    });
   } catch (e) {
     res.status(500);
     next(e);
   }
-
-  // try {
-  //   const file = await ytDlp.getInfoAsync(url);
-
-  //   // console.log(file);
-
-  //   return res.json(file);
-  // } catch (err: any) {
-  //   res.status(500);
-  //   next(err);
-  // }
 }
 
 export async function getMusicInfo(
@@ -88,19 +36,22 @@ export async function getMusicInfo(
   try {
     const { videoId } = req.params;
 
-    const yt = await getInnertube();
-    const info = await yt.music.getInfo(videoId as string);
+    if (!videoId || typeof videoId !== "string" || videoId.length !== 11) {
+      return res.status(400).json({ message: "Invalid YouTube video ID" });
+    }
 
-    const data = {
-      channelId: info.basic_info.channel_id,
-      title: info.basic_info.title,
-      duration: info.basic_info.duration,
-      thumbnail: info.basic_info.thumbnail,
-      view_count: info.basic_info.view_count,
-      url: info.basic_info.url_canonical,
-    };
+    const info = await yt.search("lil tecca salty");
 
-    res.json(data);
+    // const data = {
+    //   channelId: info.basic_info.channel_id,
+    //   title: info.basic_info.title,
+    //   duration: info.basic_info.duration,
+    //   thumbnail: info.basic_info.thumbnail,
+    //   view_count: info.basic_info.view_count,
+    //   url: info.basic_info.url_canonical,
+    // };
+
+    res.json(info);
   } catch (e) {
     next(e);
   }

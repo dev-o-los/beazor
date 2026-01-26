@@ -20,6 +20,7 @@
     "@types/express": "^5.0.6",
     "cors": "^2.8.6",
     "express": "^5.2.1",
+    "soundcord": "^2.0.1",
     "youtubei.js": "^16.0.1",
     "ytdl-core": "^4.11.5",
     "ytdlp-nodejs": "^3.3.9"

@@ -6,7 +6,7 @@ let yt: Innertube | null = null;
 export async function getInnertube() {
   if (!yt) {
     yt = await Innertube.create({
-      client_type: ClientType.ANDROID,
+      client_type: ClientType.WEB,
       retrieve_player: false,
       lang: "en",
       user_agent:
